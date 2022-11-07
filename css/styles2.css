@@ -1,0 +1,242 @@
+﻿.box{
+	background-color: #081c2c; 
+	height: 420px; 
+	width: 400px;
+	margin-top: 2%;
+	border-radius: 25px;
+	opacity: 0.8;
+}
+.box1{
+	/*background-color: #081c2c;*/
+	height: 240px; 
+	width: 270px;
+	border-radius: 25px;
+	float: left;
+}
+.box2{
+	height: 340px; 
+	width: 33.33%;
+	float: left;
+}
+.circle{
+	display: inline-block;
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	border-style: solid;
+	border-width: 2px;
+	border-color: green;
+	text-align: center;
+	font-size: 14pt;
+	margin-left: 22%;
+}
+.inner-circle{
+	display: inline-block;
+	width: 72px;
+	height: 72px;
+	border-radius: 50%;
+	border-style: solid;
+	border-width: 2px;
+	border-color: green;
+	text-align: center;
+	font-size: 14pt;
+	margin-top: 2%;
+}
+.dot {
+	height: 12px;
+	width: 12px;
+	background-color: green;
+	border-radius: 50%;
+	display: inline-block;
+	animation: blinker 2s linear infinite;
+}
+@keyframes blinker {
+	50% {
+		opacity: 0;
+	}
+}
+.loader {
+	border: 8px solid #081c2c;
+	border-radius: 50%;
+	border-top: 8px solid #f3f3f3;
+	width: 50px;
+	height: 50px;
+	-webkit-animation: spin 2s linear infinite; /* Safari */
+	animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+	0% { -webkit-transform: rotate(0deg); }
+	100% { -webkit-transform: rotate(360deg); }
+  }
+  
+  @keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+  }
+
+.arc1 {
+	display: inline-block;
+	border: 2px solid orange;
+	border-radius: 50%;
+	height: 88px;
+	width: 88px;
+	border-bottom-color: transparent;
+	/*border-left-color: transparent;*/
+	/*transform: rotate(300deg)*/
+	text-align: center;
+	font-size: 14pt;
+	margin-left: 32%;
+}
+.arc2 {
+	display: inline-block;
+	border: 2px solid orange;
+	border-radius: 50%;
+	height: 80px;
+	width: 80px;
+	border-bottom-color: transparent;
+	/*border-left-color: transparent;*/
+	/*transform: rotate(300deg)*/
+	text-align: center;
+	font-size: 14pt;
+	margin-top: 3%;
+}
+.moreTxt{
+	font-style: italic;
+	cursor: pointer;
+
+}
+.dataValue{
+	color: white;
+	font-size: 12pt;
+	font-weight: bold;
+	cursor: pointer;
+}
+.dataValue2{
+	color: white;
+	font-size: 30pt;
+	font-weight: bold;
+	cursor: pointer;
+}
+.switchBtn{
+	float: right; 
+	cursor: pointer; 
+	margin-right: 3.5%; 
+	margin-top: 10px;
+	background-color: #04111b; 
+	color: white;
+	border: 1px solid white;
+	width: 120px;
+	height: 22px;
+	text-align: center;
+	border-radius: 5px;
+}
+.innerBtns {
+	border-bottom-left-radius: 10px;
+  	border-bottom-right-radius: 10px;
+	border: 1px solid #888; 
+	float: left; 
+	text-align: center;
+	cursor: pointer;
+	background-color: cadetblue;
+	font-size: 8pt;
+	width: 100px; 
+	height: 20px;
+	color: white;
+}
+.innerBtnSel {
+	border-bottom-left-radius: 10px;
+  	border-bottom-right-radius: 10px;
+	border: 1px solid #888; 
+	float: left; 
+	text-align: center;
+	cursor: pointer;
+	background-color: cadetblue;
+	font-size: 8pt;
+	width: 100px; 
+	height: 20px;
+	border: 0px solid #888; 
+	background-color: #081c2c; 
+	cursor: default;
+}
+.innerBtns2 {
+	border-bottom-left-radius: 10px;
+  	border-bottom-right-radius: 10px;
+	border: 1px solid #888; 
+	float: left; 
+	text-align: center;
+	cursor: pointer;
+	margin-top: -10px;
+	background-color: cadetblue;
+	font-size: 8pt;
+}
+.modal {
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgb(0,0,0); /* Fallback color */
+	background-color: rgba(0,0,0,0.8); /* Black w/ opacity */
+	padding-top: 10%;
+}
+
+/* Modal Content/Box */
+.modal-content {
+	background-color: #081c2c;
+	margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+	border: 1px solid #888;
+}
+
+.imgcontainer{
+	background-color: silver;
+	height: 25px;
+}
+/* The Close Button (x) */
+.close {
+	float: right;
+	font-size: 18pt;
+	font-weight: bold;
+	color: grey;
+  }
+  #show:hover,
+  #show:focus {
+	color: green;
+	cursor: pointer;
+  }
+  .close:hover,
+  .close:focus {
+	color: red;
+	cursor: pointer;
+  }
+  
+  /* Add Zoom Animation */
+  .animate {
+	-webkit-animation: animatezoom 0.6s;
+	animation: animatezoom 0.6s
+  }
+  
+  @-webkit-keyframes animatezoom {
+	from {-webkit-transform: scale(0)} 
+	to {-webkit-transform: scale(1)}
+  }
+	
+  @keyframes animatezoom {
+	from {transform: scale(0)} 
+	to {transform: scale(1)}
+  }
+  
+  /* Change styles for span and cancel button on extra small screens */
+  @media screen and (max-width: 300px) {
+	span.psw {
+	   display: block;
+	   float: none;
+	}
+	.cancelbtn {
+	   width: 100%;
+	}
+  }
