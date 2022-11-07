@@ -1,0 +1,804 @@
+﻿<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>GHG Emissions</title>
+	<link rel="icon" type="image/x-icon" href="resources/NLNG_Logo.png">
+
+    <script src="scripts/jquery-3.4.0.min.js"></script>
+    <script src="scripts/d3.v5.min.js"></script>
+    <script src="scripts/billboard.js"></script>
+	<script src="scripts/loader.js"></script>
+	<script src="scripts/popup.js"></script>
+	<script src="scripts/datatables.min.js"></script>
+    <script src="scripts/jquery.dataTables.min.js"></script>
+
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="billboard/billboard.css">
+	<link rel="stylesheet" href="insight/insight.css">
+    <link rel="stylesheet" href="css/datatables.min.css">
+    <link rel="stylesheet" href="css/rowdetails.css">
+	<link rel="stylesheet" href="fontawesome/css/all.min.css">
+</head>
+
+  <style>
+    a {text-decoration: none;} 
+  </style>
+  
+<body style="background-image: url('resources/digital_bgd.jpg'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; font-family: 'Futura Bk BT'; color: silver; font-size: 10pt;">
+	<div id="homepage" style="display: none; height: 940px; width: 1900px; font-size: 100%;">
+
+		<div style="color: white; font-weight: bold; margin-top: 1%; margin-left: 1%; font-size: 12pt; height: 40px;">
+			<div><img src="resources/NLNG_Logo.png" width="40" height="40" style="margin-top: 0%; float: left;"></div>
+			<div style="float: left; margin-top: -8px; margin-left:20px;"><span onclick="homeClick()" style="cursor: pointer;"><br>GHG Emissions</span></div>
+			<button id="showSummary" class="switchBtn">Summary View</button>
+		</div>
+		<div style="height: 89%; width:73%; float: left; margin-top: 1%; margin-left: 2%;">
+			<div style="width: 100%; height: 17.8%; opacity: 0.8;">
+				<div style="width: 69.68%; height: 100%; float: left; background-color: #081c2c; border-radius: 25px; border: 1px solid rgb(255, 0, 242);">
+					<div style="width: 100%; height: 86.66%; float: left;">
+						<div style="float: left; width: 14%;">
+							<img src="resources/oil_rig.png" width="71.8%" style="margin-top: 30%;">
+						</div>
+						<div style="float: left; width: 75%;">
+							<div style="float: left; width: 100%;">
+								<div style="text-align: center; width: 100%; font-size: 100%;">Upstream & Gas Transmission <span style="font-size: 70%;"><i>(tCO2e/month)</i></span></div>
+								<hr style="width: 20.63%;"><br><br>
+							</div>
+							<div style="width: 32.19%; height: 100%; float: left;">
+								<span id="SPDC_CO2e"></span>
+								<span style="margin-left: 10%; color: silver;">SPDC</span>
+							</div>
+							<div style="width: 32.19%; height: 100%; float: left; text-align: center;">
+								<span id="TEPNG_CO2e"></span>
+								<span style="margin-left: 10%; color: silver;">TEPNG</span>
+							</div>
+							<div style="width: 32.19%; height: 100%; float: left; text-align: right;">
+								<span id="NAOC_CO2e"></span>
+								<span style="margin-left: 10%; color: silver;">NAOC</span>
+							</div>
+						</div>
+						<div style="float: left; width: 10.77%; height: 107%;">
+							<div id="upstreamDate" style="width: 80.76%; height: 14.28%; float: left; text-align: right;">[ - ]</div>
+							<div style="width: 100%; height: 85.7%;"></div>
+							<div style="width: 80.76%; height: 14.29%; float: left; text-align: right;">
+								<u><span class="moreTxt" id="openUpstream">more...</span></u>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div style="width: 28.59%; height: 100%; float: left; background-color: #081c2c; border-radius: 25px; margin-left: 1.08%; border: 1px solid rgb(217, 255, 0);">
+					<div style="float: left; width: 20.2%; height: 6.67%;"></div>
+					<div style="text-align: center; width: 55.55%; font-size: 100%; float: left;">
+						Projects <span style="font-size: 70%;"><i>(tCO2e/month)</i></span>
+						<hr style="width: 68.18%;"><br>
+					</div>
+					<div id="projDate" style="float: left; width: 20.2%; height: 16.67%; text-align: right;">[ - ]</div>
+					<div style="float: left; width: 36.86%; height: 46.66%;">
+						<img src="resources/projects.png" width="61.8%" style="margin-top: -15%; margin-left: 15%;">
+					</div>
+					<div style="float: left; width: 63.13%; height: 50.66%;">
+						<span id="Projects_CO2e"></span><br>
+						<span style="margin-left: 30%; color: silver;">Construction Site</span>
+					</div>
+					<div style="width: 95.95%; height: 13.33%; float: left; text-align: right;">
+						<u><span id="openProjects" class="moreTxt">more...</span></u>
+					</div>
+				</div>
+			</div>
+			<div style="width: 99.63%; height: 64.28%;">
+				<div style="height: 77.77%; width: 28.98%; float: left;">
+					<div class="box" style="margin-top: 2.38%; height: 123.8%; border: 1px solid cyan; width: 100%;">
+						<div style="float: left; width: 20%; height: 2.38%;"></div>
+						<div style="text-align: center; width: 60%; font-size: 100%; float: left;">Plant <span style="font-size: 70%;"><i>(tCO2e/day)</i></span></div>
+						<div style="float: left; width: 15%; height: 5.95%; text-align: right;"><span class="dot"></span> Live</div>
+						<hr style="width: 37.5%;">
+						<div class="box2" style="margin-top: -7%; width: 33.33%; height: 65.38%;">
+							<div style="width: 100%; height: 41.17%;">
+								<div style="text-align: center; width: 100%;"><br><br>Acid Gas Removal</div>
+								<br><span id="Acid_Gas_CO2"></span>
+							</div>
+							<div style="width: 100%; height: 17.64%;"></div>
+							<div style="width: 100%; height: 41.17%;">
+								<div style="text-align: center; width: 100%;">LHU</div>
+								<br><span id="LHU_CO2e"></span>
+							</div>
+						</div>
+						<div class="box2" style="margin-top: -7%; width: 33.33%; height: 65.38%;">
+							<div style="width: 100%; height: 17.64%;">
+							</div>
+							<div style="width: 100%; height: 30.88%;">
+								<hr style="width: 37.5%; transform: rotate(330deg); margin-left: 75%; margin-top: 50%;"><br>
+								<hr style="width: 37.5%; transform: rotate(30deg); margin-left: -10%; margin-top: -10%;"><br>
+								<img src="resources/LNG_Plant.png" width="90%" style="margin-top: -30%; margin-left: 10%;">
+								<hr style="width: 37.5%; transform: rotate(30deg); margin-left: 75%;"><br>
+								<hr style="width: 37.5%; transform: rotate(330deg); margin-left: -15%; margin-top: -20%;"><br>
+							</div>
+							<div style="width: 100%; height: 48.52%;">
+							</div>
+						</div>
+						<div class="box2" style="margin-top: -7%; width: 33.33%; height: 65.38%;">
+							<div style="width: 100%; height: 41.17%;">
+								<div style="text-align: center; width: 100%;"><br><br>Trains</div>
+								<br><span id="Trains_CO2e"></span>
+							</div>
+							<div style="width: 100%; height: 17.64%;"></div>
+							<div style="width: 100%; height: 41.17%;">
+								<div style="text-align: center; width: 100%;">GTG</div>
+								<br><span id="GTG_CO2e"></span>
+							</div>
+						</div>
+						<div class="box2" style="height: 1px; width: 75%; background-color: grey; margin-left: 50px; margin-top: -2%;"></div>
+						<div style="width: 100%; height: 22%; margin-left: 5%;">
+							<div style="width: 32.5%; height: 125%; float: left;">
+								<div style="width: 100%; height: 33.33%; float: left; margin-top: 13.33%;">
+									<span id="Waste_CO2e"></span>
+									<span>Waste Incinerator</span>
+								</div>
+								<div style="width: 100%; height: 33.33%; float: left;">
+									
+								</div>
+								<div style="width: 100%; height: 33.33%; float: left;">
+									<span id="Mobile_CO2e"></span>
+								<span>Mobile Combustion</span>
+								</div>
+							</div>
+							<div style="width: 30%; height: 125%; float: left;">
+								<div id="plantDate" style="width: 91.66%; height: 16.67%; float: left; text-align: right;">[ - ]</div>
+								<div style="width: 100%; height: 16.67%; float: left; margin-top: 13.33%;">									
+								</div>
+								<div style="width: 91.66%; height: 33.33%; float: left; margin-left: 0px; text-align: right;">
+									<span id="Fugitives_CO2e"></span>
+									<span>Fugitives</span>
+								</div>
+								<div style="width: 100%; height: 33.33%; float: left;">
+									
+								</div>
+							</div>
+							<div style="width: 1px; height: 100%; float: left; background-color: grey; margin-top: 5%;"></div>
+							<div style="width: 30%; height: 100%; float: left;">
+								<div id="flareDate" style="width: 100%; height: 18.5%; float: left; text-align: right;">[ - ]</div>
+								<div style="width: 100%; height: 37.5%; float: left; font-size: 24pt;"></div>
+								&nbsp;<span id="Flare_CO2e"></span>
+								&nbsp;<span>Flaring</span>
+							</div>
+						</div>
+						<div style="width: 95%; height: 4.76%; float: left; text-align: right;">
+							<u><span class="moreTxt" id="openPlant">more...</span></u>
+						</div>
+					</div>
+				</div>
+				<div style="width: 71.01%; height: 100%; float: left;">
+					<div style="height: 33.33%; width: 100%;"></div>
+					<div id="cradleGate" class="box1" style="margin-left: 3.06%; width: 20.4%; height: 44.44%;">
+						<div style="text-align: center; width: 100%; font-size: 100%;">SGE Per Cargo<br>(Cradle to Gate)</div>
+						<hr style="width: 60%;">
+						<table style="color: silver; font-size: 90%;">
+							<tr>
+								<td><button id="toGrave" style="font-size: 8pt; width: 100%; cursor: pointer;">To Grave</button></td>
+								<td>&nbsp;</td>
+								<td style="text-align: right;"><span>[2020]</span></td>
+							</tr>
+							<tr>
+								<td style="width: 80%;">&nbsp;<br>LNG</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;<br><span class="dataValue">0.42</span></td>
+							</tr>
+							<tr>
+								<td>&nbsp;<br>LPG</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;<br><span class="dataValue">0.00</span></td>
+							</tr>
+							<tr>
+								<td>&nbsp;<br>Condensate</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;<br><span class="dataValue">0.00</span></td>
+							</tr>
+						</table>				
+					</div>
+					<div id="cradleGrave" class="box1" style="margin-left: 3.06%; width: 20.4%; height: 44.44%; display: none;">
+						<div style="text-align: center; width: 100%; font-size: 100%;">SGE Per Cargo<br>(Cradle to Grave)</div>
+						<hr style="width: 60%;">
+						<table style="color: silver; font-size: 90%;">
+							<tr>
+								<td><button id="toGate" style="font-size: 8pt; width: 100%; cursor: pointer;">To Gate</button></td>
+								<td>&nbsp;</td>
+								<td style="text-align: right;"><span>[2020]</span></td>
+							</tr>
+							<tr>
+								<td style="width: 80%;">&nbsp;<br>LNG</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;<br><span class="dataValue">0.00</span></td>
+							</tr>
+							<tr>
+								<td>&nbsp;<br>LPG</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;<br><span class="dataValue">0.00</span></td>
+							</tr>
+							<tr>
+								<td>&nbsp;<br>Condensate</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;<br><span class="dataValue">0.00</span></td>
+							</tr>
+						</table>
+					</div>
+					<div style="width: 46.93%; height: 44.44%; float: left; margin-top: -3%; margin-left: 9.18%;">
+						<div style="float: left; font-size: 850%; margin-left: 0%;">
+							<i class="fas fa-seedling" style="color: lime;"></i>
+						</div>
+						<div style="float: left;">
+							<div style="height: 100px;">
+								<div id="CO2e_Per_LNG2" style="float: left; color: white; font-weight: bold; font-size: 500%; cursor: pointer;">-</div>
+								<div style="float: none; font-size: 150%;"><span style="font-size: 67%;" id="CO2e_Per_Prod_Date">[ - ]</span><br><br>tCO2e</div>
+							</div>
+							<div style="font-size: 150%; margin-top: 0%;">Business Carbon Intensity</div>
+						</div>
+					</div>
+					<div class="box1" style="width: 20.4%; height: 44.44%;">
+						<div style="text-align: center; width: 100%; font-size: 100%;">Business Carbon Intensity<br>(Rolling 12Months Total)</div>
+						<hr style="width: 60%;">
+						<table style="color: silver; font-size: 90%;">
+							<tr>
+								<td></td>
+								<td>&nbsp;</td>
+								<td id="CO2e_Per_Prod_Lag_Date" style="text-align: right; width: 37%;"><span>[ - ]</span></td>
+							</tr>
+							<tr>
+								<td>Per Tons of LNG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;<br><span id="CO2e_Per_LNG_Lag2" class="dataValue" style="float: right;">0.00</span></td>
+							</tr>
+							<tr>
+								<td>Per Tons of LNG, LPG & Condy</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;<br><span id="CO2e_Per_Prod_Lag2" class="dataValue" style="float: right;">0.00</span></td>
+							</tr>
+							<tr>
+								<td>Per mmBtu of Energy Content</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;<br><span class="dataValue" style="float: right;">0.00</span></td>
+							</tr>
+						</table>
+					</div>
+					<div class="box1" style="width: 100%; height: 18.51%;">
+						<div style="width: 81.63%; height: 100%; float: left;"></div>
+						<div style="width: 17.16%; height: 100%; float: left; border: 1px solid white; padding-top: 1%;">
+							<span style="font-size: 10pt; font-weight:bold; margin-left: 5.61%;">Legend</span><br><br>
+							<div style="float: left; margin-left: 5.61%; width: 22.47%; height: 4%; background-color: cyan; margin-top: 7px;"></div>
+							<span>&nbsp;&nbsp;Scope 1</span><br>
+							<div style="float: left; margin-left: 5.61%; width: 22.47%; height: 4%; background-color: rgb(217, 255, 0); margin-top: 7px;"></div>
+							<span>&nbsp;&nbsp;Scope 2</span><br>
+							<div style="float: left; margin-left: 5.61%; width: 22.47%; height: 4%; background-color: rgb(255, 0, 242); margin-top: 7px;"></div>
+							<span>&nbsp;&nbsp;Scope 3</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div style="width: 99.63%; height: 17.85%; margin-top: 10px; opacity: 0.8;">
+				<div style="width: 100%; height: 100%; float: left; background-color: #081c2c; border-radius: 25px; border: 1px solid cyan;">
+					<div style="float: left; width: 2.89%; height: 6.66%;"></div>
+					<div style="text-align: center; width: 89.85%; font-size: 100%; float: left;">
+						Shipping <span style="font-size: 70%;"><i>(tCO2e/month)</i></span>
+						<hr style="width: 12.09%;">
+					</div>
+					<div id="shipDate" style="float: left; width: 5.79%; height: 16.66%; text-align: right;">[ - ]</div>
+					<div style="width: 100%; height: 60%; float: left;">
+						<div style="float: left; margin-left: 5%;">
+							<img src="resources/lngboat2.png" width="120" style="margin-top: 2%;">
+						</div>
+						<div style="width: 13.47%; height: 100%; float: left; margin-top: 4%;">
+							<span id="NSML_CO2e"></span>
+							<span>NSML</span>
+						</div>
+						<div style="width: 13.47%; height: 100%; float: left; margin-top: 0%;">
+							<span id="BW_Gas_CO2e"></span>
+							<span>BW Gas</span>
+						</div>
+						<div style="width: 13.47%; height: 100%; float: left; margin-top: 4%;">
+							<span id="NYK_CO2e"></span>
+							<span>NYK</span>
+						</div>
+						<div style="width: 13.47%; height: 100%; float: left; margin-top: 0%;">
+							<span id="NMM_CO2e"></span>
+							<span>NMM</span>
+						</div>
+						<div style="width: 13.47%; height: 100%; float: left; margin-top: 4%;">
+							<span id="Temile_CO2e"></span>
+							<span>Temile</span>
+						</div>
+						<div style="width: 13.47%; height: 100%; float: left; margin-top: 0%;">
+							<span id="Marine_Partners_CO2e"></span>
+							<span>Marine Contractors</span>
+						</div>
+					</div>
+					<div style="width: 98.55%; height: 13.33%; float: left; text-align: right;">
+						<u><span class="moreTxt" id="openShip">more...</span></u>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div style="height: 89.36%; width: 21.05%; margin-top: 0.5%; float: left; margin-left: 1%;">
+			<div class="box" style="border: 1px solid rgb(217, 255, 0); width: 100%; height: 50%;">
+				<div style="float: left; width: 20%; height: 2.38%;"></div>
+				<div style="text-align: center; width: 55%; font-size: 100%; float: left;">Purchased Energy <span style="font-size: 70%;"><i>(tCO2e/month)</i></span></div>
+				<div id="esdDate" style="float: left; width: 20%; height: 5.95%; text-align: right;">[ - ]</div>
+				<hr style="width: 37.5%;"><br>
+				<div class="box2" style="width: 33.33%; height: 80.95%;">
+					<div style="width: 100%; height: 35.29%;">
+						<div style="text-align: center; width: 100%;">CHO</div>
+						<br><span id="PHC_CO2e"></span>
+					</div>
+					<div style="width: 100%; height: 29.41%;"></div>
+					<div style="width: 100%; height: 35.29%;">
+						<div style="text-align: center; width: 100%;">LTO</div>
+						<br><span id="LTO_CO2e"></span>
+					</div>
+				</div>
+				<div class="box2" style="width: 33.33%; height: 80.95%;">
+					<div style="width: 100%; height: 23.82%;"></div>
+					<div style="width: 100%; height: 120px;">
+						<hr style="width: 37.5%; transform: rotate(330deg); margin-left: 75%; margin-top: 30%;"><br>
+						<hr style="width: 37.5%; transform: rotate(30deg); margin-left: -20%; margin-top: -20%;"><br>
+						<img src="resources/office.png" width="120" style="margin-top: -30%;">
+						<hr style="width: 37.5%; transform: rotate(30deg); margin-left: 75%;"><br>
+						<hr style="width: 37.5%; transform: rotate(330deg); margin-left: -25%; margin-top: -20%;"><br>
+					</div>
+					<div style="width: 100%; height: 35.29%;"></div>
+				</div>
+				<div class="box2" style="width: 33.33%; height: 80.95%;">
+					<div style="width: 100%; height: 35.29%;">
+						<div style="text-align: center; width: 100%;">BOI Abuja</div>
+						<br><span id="ABJ_CO2e"></span>
+					</div>
+					<div style="width: 100%; height: 29.41%;"></div>
+					<div style="width: 100%; height: 35.29%;">
+						<div style="text-align: center; width: 100%;">London</div>
+						<br><span id="LON_NG_CO2e"></span>
+					</div>
+				</div>
+				<div style="width: 95%; height: 4.76%; float: left; text-align: right;">
+					<u><span class="moreTxt" id="openOffice">more...</span></u>
+				</div>
+			</div>
+			<div class="box" style="border: 1px solid rgb(217, 255, 0); width: 100%; height: 50%;">
+				<div style="float: left; width: 20%; height: 2.38%;"></div>
+				<div style="text-align: center; width: 55%; font-size: 95%; float: left;">
+					Mobile Combustion <span style="font-size: 70%;"><i>(tCO2e/month)</i></span>
+					<hr style="width: 68.18%;"><br>
+				</div>
+				<div id="lssDate" style="float: left; width: 20%; height: 5.95%; text-align: right;">[ - ]</div>
+				<div style="width: 100%; height: 28.57%; margin-left: 5%;">
+					<div style="width: 37.5%; height: 66.66%; float: left; font-size: 30pt;">
+						<!--img src="resources/airplane.png" width="100"-->
+						<i class="fas fa-plane-departure"></i>
+					</div>
+					<div style="width: 32.5%; height: 58.33%; float: left; padding-top: 10px;">
+						<span>Aviation</span>
+					</div>
+					<div style="width: 30%; height: 58.33%; float: left; padding-top: 10px;">
+						<span id="Aviation_CO2e"></span>
+					</div>
+				</div>
+				<div style="height: 1px; width: 75%; background-color: grey; margin-left: 12.5%;"></div>
+				<div style="height: 4.52%; width: 100%;"></div>
+				<div style="width: 100%; height: 33.33%; margin-left: 5%;">
+					<div style="width: 30%; height: 75%; float: left; margin-top: 35px">
+						<span id="Passenger_Boats_CO2e"></span><br>
+						<span>Passenger Boats</span>
+					</div>
+					<div style="width: 40%; height: 100%; float: left; font-size: 24pt;">
+						<!--img src="resources/boat.png" width="130" style="margin-top: 15%;"-->
+						<i class="fas fa-ship" style="margin-top: 25%; margin-left: 20%;"></i>
+					</div>
+					<div style="width: 28.33%; height: 100%; float: left;">
+						<div style="width: 117.64%; height: 50%; float: left;">
+							<span id="Tug_Boats_CO2e"></span><br>
+							<span>Tug Boats</span>
+						</div>
+						<div style="width: 105.88%; height: 50%; float: left;">
+							<span id="Escort_CO2e"></span><br>
+							<span>Escort Boats</span>
+						</div>
+					</div>
+				</div>
+				<div style="height: 1px; width: 75%; background-color: grey; margin-left: 12.5%;"></div>
+				<div style="width: 95%; height: 24.28%; margin-left: 5%;">
+					<div style="width: 30%; height: 70%; float: left; margin-top: 35px;">
+						<span id="Bny_Fleet_CO2e"></span><br>
+						<span>Bonny Fleet</span>
+					</div>
+					<div style="width: 40%; height: 70%; float: left; font-size: 24pt;">
+						<!--img src="resources/toyota.png" width="100" style="margin-top: 15%;"-->
+						<i class="fas fa-car" style="margin-top: 25%; margin-left: 20%;"></i>
+					</div>
+					<div style="width: 30%; height: 70%; float: left; margin-top: 35px;">
+						<span id="Non_Bny_Fleet_CO2e"></span><br>
+						<span>Non-Bonny Fleet</span>
+					</div>
+				</div>
+				<div style="width: 95%; height: 4.76%; float: left; text-align: right;">
+					<u><span class="moreTxt" id="openLSS">more...</span></u>
+				</div>
+			</div>
+		</div>
+
+		<div id="id01" class="modal"> 
+			<form name="newForm4" class="modal-content animate" style="font-family: Futura Md BT; height: 180px; width: 600px;" action="javascript:void(0);">
+				<div class="imgcontainer">
+					<span style="color: grey; font-size:12pt;">&nbsp;Upstream & GTS</span>
+					<span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Form">&times;</span>
+				</div>
+				<div id="SPDC" class="innerBtnSel">SPDC</div>
+				<div id="TEPNG" class="innerBtns">TEPNG</div>
+				<div id="NAOC" class="innerBtns">NAOC</div>
+				<br><br><br>
+				<span id="upstreamDetails" style="font-size: 8pt;"></span>
+				<br><br>
+			</form>
+		</div>
+
+		<div id="id06" class="modal"> 
+			<form name="newForm4" class="modal-content animate" style="font-family: Futura Md BT; width: 835px;" action="javascript:void(0);">
+				<div class="imgcontainer">
+					<span style="color: grey; font-size:12pt;">&nbsp;Plant</span>
+					<span onclick="document.getElementById('id06').style.display='none'" class="close" title="Close Form">&times;</span>
+				</div>
+				<div id="Acid_Gas_Removal" class="innerBtnSel">Acid_Gas_Removal</div><div id="Trains" class="innerBtns">Trains</div>
+				<div id="LHU" class="innerBtns">LHU</div><div id="GTG" class="innerBtns">GTG</div><div id="Waste" class="innerBtns">Waste Incinerator</div>
+				<div id="Fugitives" class="innerBtns">Fugitives</div><div id="Mobile" class="innerBtns">Mobile Combustion</div><div id="Flare" class="innerBtns">Flaring</div><br><br><br>
+				<span id="plantDetails" style="font-size: 8pt;"></span>
+				<br><br>
+			</form>
+		</div>
+
+		<div id="id07" class="modal"> 
+			<form name="newForm4" class="modal-content animate" style="font-family: Futura Md BT; width: 630px;" action="javascript:void(0);">
+				<div class="imgcontainer">
+					<span style="color: grey; font-size:12pt;">&nbsp;Mobile Combustion</span>
+					<span onclick="document.getElementById('id07').style.display='none'" class="close" title="Close Form">&times;</span>
+				</div>
+				<div id="Av" class="innerBtnSel">Aviation</div>
+				<div id="P_Boats" class="innerBtns">Passenger Boats</div>
+				<div id="T_Boats" class="innerBtns">Tug Boats</div>
+				<div id="Escort" class="innerBtns">Escort Boats</div>
+				<div id="Bny_Fleet" class="innerBtns">Bonny Fleet</div>
+				<div id="Non_Bny_Fleet" class="innerBtns">Non-Bonny Fleet</div>
+				<br><br><br>
+				<span id="lssDetails" style="font-size: 8pt;"></span>
+				<br><br>
+			</form>
+		</div>
+
+		<div id="id03" class="modal"> 
+			<form name="newForm4" class="modal-content animate" style="font-family: Futura Md BT; width: 600px;" action="javascript:void(0);">
+				<div class="imgcontainer">
+					<span style="color: grey; font-size:12pt;">&nbsp;Purchased Energy</span>
+					<span onclick="document.getElementById('id03').style.display='none'" class="close" title="Close Form">&times;</span>
+				</div>
+				<div id="PHC" class="innerBtnSel">CHO</div>
+				<div id="ABJ" class="innerBtns">BOI_Abuja</div>
+				<div id="LTO" class="innerBtns">LTO</div>
+				<div id="LON" class="innerBtns">London</div>
+				<br><br><br>
+				<span id="officeDetails" style="font-size: 8pt;"></span>
+				<br><br>
+			</form>
+		</div>
+
+		<div id="id05" class="modal"> 
+			<form name="newForm4" class="modal-content animate" style="font-family: Futura Md BT; width: 600px;" action="javascript:void(0);">
+				<div class="imgcontainer">
+					<span style="color: grey; font-size:12pt;">&nbsp;Projects</span>
+					<span onclick="document.getElementById('id05').style.display='none'" class="close" title="Close Form">&times;</span>
+				</div>
+				<br><br>
+				<span id="projectDetails" style="font-size: 8pt;"></span>
+				<br><br>
+			</form>
+		</div>
+
+		<div id="id04" class="modal"> 
+			<form name="newForm4" class="modal-content animate" style="font-family: Futura Md BT; width: 650px;" action="javascript:void(0);">
+				<div class="imgcontainer">
+					<span style="color: grey; font-size:12pt;">&nbsp;Shipping</span>
+					<span onclick="document.getElementById('id04').style.display='none'" class="close" title="Close Form">&times;</span>
+				</div>
+				<div id="NSML" class="innerBtnSel">NSML</div>
+				<div id="BW_Gas" class="innerBtns">BW Gas</div>
+				<div id="NYK" class="innerBtns">NYK</div>
+				<div id="NMM" class="innerBtns">NMM</div>
+				<div id="Temile" class="innerBtns">Temile</div>
+				<div id="Marine_Partners" class="innerBtns">Marine Partners</div>
+				<br><br><br>
+				<span id="shipDetails" style="font-size: 8pt;"></span>
+				<br><br>
+			</form>
+		</div>
+	</div>
+
+	<div id="summary" style="display: none; height: 750px; width: 1580px;">
+		<div style="color: white; font-weight: bold; margin-top: 1%; margin-left: 1%; font-size: 12pt; height: 40px;">
+			<div><img src="resources/NLNG_Logo.png" width="40" height="40" style="margin-top: 0%; float: left;"></div>
+			<div style="float: left; margin-top: -8px; margin-left: 20px;"><span onclick="homeClick()" style="cursor: pointer;"><br>GHG Emissions</span></div>
+			<button id="showDetails" class="switchBtn">Detail View</button>
+			<input id="summMonth" onchange="refreshPg()" type="month" style="float: right; margin-right: 20px; width: 6.57%; margin-top: 10px;">
+		</div>
+		<div style="height: 89.36%; width:72.89%; float: left; margin-top: 1%; margin-left: 2%;">
+			<div style="width: 100%; height: 17.85%; opacity: 0.8;">
+				<div style="width: 69.67%; height: 100%; float: left; background-color: #081c2c; border-radius: 25px; border: 1px solid rgb(255, 0, 242);">
+					<div style="width: 100%; height: 86.66%; float: left;">
+						<div style="float: left; width: 13.88%;">
+							<img src="resources/oil_rig.png" width="135%" style="margin-top: 0%;">
+						</div>
+						<div style="float: left; width: 75.33%;">
+							<div style="float: left; width: 100%;">
+								<div style="text-align: center; width: 100%; font-size: 12pt;">Upstream & Gas Transmission <span style="font-size: 8pt;"><i>(tCO2e)</i></span></div>
+								<hr style="width: 20.63%;"><br><br>
+							</div>
+							<div style="width: 32.18%; height: 100%; float: left;">
+								&nbsp;
+							</div>
+							<div style="width: 32.18%; height: 100%; float: left; text-align: center;">
+								<span id="Upstream_CO2e"></span>
+							</div>
+							<div style="width: 32.18%; height: 100%; float: left; text-align: right;">
+								
+							</div>
+						</div>
+						<div style="float: left; width: 10.77%; height: 1.07%;">
+							<div id="Upstream_CO2e_Date" style="width: 80.76%; height: 14.28%; float: left; text-align: right;">[ - ]</div>
+							<div style="width: 100%; height: 85.71%;"></div>
+							<div style="width: 80.76%; height: 14.28%20px; float: left; text-align: right;">
+								<!--u><span class="moreTxt" id="openUpstream">more...</span></u-->
+							</div>
+						</div>
+					</div>
+				</div>
+				<div style="width: 28.59%; height: 100%; float: left; background-color: #081c2c; border-radius: 25px; margin-left: 15px; border: 1px solid rgb(217, 255, 0);">
+					<div style="float: left; width: 20.20%; height: 6.66%;"></div>
+					<div style="text-align: center; width: 55.55%; font-size: 12pt; float: left;">
+						Projects <span style="font-size: 8pt;"><i>(tCO2e)</i></span>
+						<hr style="width: 68.18%;"><br>
+					</div>
+					<div id="Project_CO2e_Date" style="float: left; width: 20.2%; height: 25px; text-align: right;">[ - ]</div>
+					<div style="float: left; width: 36.86%; height: 46.66%;">
+						<img src="resources/projects.png" width="71.81%" style="margin-top: -20%; margin-left: 15%;">
+					</div>
+					<div style="float: left; width: 50.50%; height: 46.66%; text-align: right;">
+						<span id="Project_CO2e"></span>
+					</div>
+					<div style="width: 95.95%; height: 13.33%; float: left; text-align: right;">
+						<!--u><span id="openProjects" class="moreTxt">more...</span></u-->
+					</div>
+				</div>
+			</div>
+			<div style="width: 99.63%; height: 64.28%;">
+				<div style="height: 96.29%; width: 28.98%; float: left;">
+					<div class="box" style="margin-top: 10px; width: 100%; height: 100%; border: 1px solid cyan;">
+						<div style="float: left; width: 20%; height: 1.92%;"></div>
+						<div style="text-align: center; width: 55%; font-size: 12pt; float: left;">Plant <span style="font-size: 8pt;"><i>(tCO2e)</i></span></div>
+						<div id="Plant_CO2e_Date" style="float: left; width: 20%; height: 4.8%; text-align: right;">[ - ]</div>
+						<hr style="width: 37.5%;">
+
+						<div style="width: 100%; height: 57.69%;">
+							<img src="resources/LNG_Plant.png" width="75%" style="margin-top: 10%; margin-left: 12%;">
+						</div><br><br>
+						<div style="width: 100%; height: 20.19%; text-align: center;">
+							<span id="Plant_CO2e"></span>
+						</div>
+					</div>
+				</div>
+				<div style="width: 71.01%; height: 100%; float: left;">
+					<div style="height: 33.33%; width: 100%;"></div>
+					<div id="cradleGate2" class="box1" style="margin-left: 3.06%; width: 20.4%; height: 44.44%;">
+						<div style="text-align: center; width: 100%; font-size: 100%;">SGE Per Cargo<br>(Cradle to Gate)</div>
+						<hr style="width: 60%;">
+						<table style="color: silver; font-size: 90%;">
+							<tr>
+								<td><button id="toGrave2" style="font-size: 8pt; width: 100%; cursor: pointer;">To Grave</button></td>
+								<td>&nbsp;</td>
+								<td style="text-align: right;"><span>[2020]</span></td>
+							</tr>
+							<tr>
+								<td style="width: 80%;">&nbsp;<br>LNG</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;<br><span class="dataValue">0.42</span></td>
+							</tr>
+							<tr>
+								<td>&nbsp;<br>LPG</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;<br><span class="dataValue">0.00</span></td>
+							</tr>
+							<tr>
+								<td>&nbsp;<br>Condensate</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;<br><span class="dataValue">0.00</span></td>
+							</tr>
+						</table>				
+					</div>
+					<div id="cradleGrave2" class="box1" style="margin-left: 3.06%; width: 20.4%; height: 44.44%; display: none;">
+						<div style="text-align: center; width: 100%; font-size: 100%;">SGE Per Cargo<br>(Cradle to Grave)</div>
+						<hr style="width: 60%;">
+						<table style="color: silver; font-size: 90%;">
+							<tr>
+								<td><button id="toGate2" style="font-size: 8pt; width: 100%; cursor: pointer;">To Gate</button></td>
+								<td>&nbsp;</td>
+								<td style="text-align: right;"><span>[2020]</span></td>
+							</tr>
+							<tr>
+								<td style="width: 80%;">&nbsp;<br>LNG</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;<br><span class="dataValue">0.00</span></td>
+							</tr>
+							<tr>
+								<td>&nbsp;<br>LPG</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;<br><span class="dataValue">0.00</span></td>
+							</tr>
+							<tr>
+								<td>&nbsp;<br>Condensate</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;<br><span class="dataValue">0.00</span></td>
+							</tr>
+						</table>
+					</div>
+					<div style="width: 46.93%; height: 44.44%; float: left; margin-top: -3%; margin-left: 9.18%;">
+						<div style="float: left; font-size: 850%; margin-left: 0%;">
+							<i class="fas fa-seedling" style="color: lime;"></i>
+						</div>
+						<div style="float: left;">
+							<div style="height: 100px;">
+								<div id="CO2e_Per_LNG" style="float: left; color: white; font-weight: bold; font-size: 500%; cursor: pointer;">-</div>
+								<div style="float: none; font-size: 150%;"><span style="font-size: 67%;" id="CO2e_Per_LNG_Date">[ - ]</span><br><br>tCO2e</div>
+							</div>
+							<div style="font-size: 150%; margin-top: 0%;">Business Carbon Intensity</div>
+						</div>
+					</div>
+					<div class="box1" style="width: 20.4%; height: 44.44%;">
+						<div style="text-align: center; width: 100%; font-size: 100%;">Business Carbon Intensity<br>(Rolling 12Months Total)</div>
+						<hr style="width: 60%;">
+						<table style="color: silver; font-size: 90%;">
+							<tr>
+								<td></td>
+								<td>&nbsp;</td>
+								<td id="CO2e_Per_LNG_Lag_Date" style="text-align: right; width: 37%;"><span>[ - ]</span></td>
+							</tr>
+							<tr>
+								<td>Per Tons of LNG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;<br><span id="CO2e_Per_LNG_Lag" class="dataValue" style="float: right;">0.00</span></td>
+							</tr>
+							<tr>
+								<td>Per Tons of LNG, LPG & Condy</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;<br><span id="CO2e_Per_Prod_Lag" class="dataValue" style="float: right;">0.00</span></td>
+							</tr>
+							<tr>
+								<td>Per mmBtu of Energy Content</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;<br><span class="dataValue" style="float: right;">0.00</span></td>
+							</tr>
+						</table>
+					</div>
+					<div class="box1" style="width: 100%; height: 18.51%;">
+						<div style="width: 81.63%; height: 100%; float: left;"></div>
+						<div style="width: 17.16%; height: 100%; float: left; border: 1px solid white; padding-top: 1%;">
+							<span style="font-size: 10pt; font-weight:bold; margin-left: 5.61%;">Legend</span><br><br>
+							<div style="float: left; margin-left: 5.61%; width: 22.47%; height: 4%; background-color: cyan; margin-top: 7px;"></div>
+							<span>&nbsp;&nbsp;Scope 1</span><br>
+							<div style="float: left; margin-left: 5.61%; width: 22.47%; height: 4%; background-color: rgb(217, 255, 0); margin-top: 7px;"></div>
+							<span>&nbsp;&nbsp;Scope 2</span><br>
+							<div style="float: left; margin-left: 5.61%; width: 22.47%; height: 4%; background-color: rgb(255, 0, 242); margin-top: 7px;"></div>
+							<span>&nbsp;&nbsp;Scope 3</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div style="width: 99.64%; height: 17.85%; margin-top: 10px; opacity: 0.8;">
+				<div style="width: 100%; height: 100%; float: left; background-color: #081c2c; border-radius: 25px; border: 1px solid cyan;">
+					<div style="float: left; width: 2.89%; height: 6.66%;"></div>
+					<div style="text-align: center; width: 89.85%; font-size: 12pt; float: left;">
+						Shipping <span style="font-size: 8pt;"><i>(tCO2e)</i></span>
+						<hr style="width: 12.09%;">
+					</div>
+					<div id="Shipping_CO2e_Date" style="float: left; width: 5.79%; height: 16.66%; text-align: right;">[ - ]</div>
+					<div style="width: 100%; height: 60%; float: left;">
+						<div style="float: left; margin-left: 5%;">
+							<img src="resources/lngboat2.png" width="60%" style="margin-top: -13%;">
+						</div>
+
+						<div style="width: 28.98%; height: 100%; float: left; margin-top: -5%; margin-left: 70%;">
+							<span id="Shipping_CO2e"></span>
+						</div>
+					</div>
+					<!--div style="width: 1360px; height: 20px; float: left; text-align: right;">
+						<u><span class="moreTxt" id="openShip">more...</span></u>
+					</div-->
+				</div>
+			</div>
+		</div>
+		<div style="height: 89.36%; width: 21.05%; margin-top: 0.5%; float: left; margin-left: 1%;">
+			<div class="box" style="border: 1px solid rgb(217, 255, 0); width: 100%; height: 50%;">
+				<div style="float: left; width: 20%; height: 2.38%;"></div>
+				<div style="text-align: center; width: 55%; font-size: 12pt; float: left;">Purchased Energy <span style="font-size: 8pt;"><i>(tCO2e)</i></span></div>
+				<div id="Office_CO2e_Date" style="float: left; width: 20%; height: 5.95%; text-align: right;">[ - ]</div>
+				<hr style="width: 37.5%;"><br>
+				<div style="width: 100%; height:59.52%;">
+					<img src="resources/office.png" width="60%" style="margin-top: 5%; margin-left: 75px;">
+				</div><br>
+				<div style="width: 100%; height: 25%; text-align: center;">
+					<span id="Office_CO2e"></span>
+				</div>
+				
+				<!--div style="width: 380px; height: 20px; float: left; text-align: right;">
+					<u><span class="moreTxt" id="openOffice">more...</span></u>
+				</div-->
+			</div>
+			<div class="box" style="border: 1px solid rgb(217, 255, 0); width: 100%; height: 50%;">
+				<div style="float: left; width: 20%; height: 2.38%;"></div>
+				<div style="text-align: center; width: 55%; font-size: 12pt; float: left;">
+					Mobile Combustion <span style="font-size: 8pt;"><i>(tCO2e)</i></span>
+					<hr style="width: 37.5%;"><br>
+				</div>
+				<div id="Logistics_CO2e_Date" style="float: left; width: 20%; height: 5.95%; text-align: right;">[ - ]</div>
+				<div style="width: 100%; height: 28.57%; margin-left: 5%;">
+					<div style="width: 50%; height: 36.36%; float: left; font-size: 500%;">
+						<i class="fas fa-plane-departure"></i>
+					</div>
+					<div style="width: 37.5%; height: 66.66%; float: left; font-size: 500%; text-align: right;">
+						<i class="fas fa-ship"></i>
+					</div>
+				</div>
+				<div style="height: 14.28%; width: 100%;"></div>
+				<div style="width: 100%; height: 23.8%; float: left; font-size: 24pt; text-align: center;">
+					<span id="Logistics_CO2e"></span>
+				</div>
+				<div style="width: 100%; height: 23.8%; float: left; font-size: 500%; text-align: center;">
+					<i class="fas fa-car"></i>
+				</div>
+				<!--div style="width: 380px; height: 20px; float: left; text-align: right;">
+					<u><span class="moreTxt" id="openLSS">more...</span></u>
+				</div-->
+			</div>
+		</div>
+	</div>
+
+	<div id="id02" class="modal"> 
+		<form name="newForm4" class="modal-content animate" style="font-family: Futura Md BT; height: 320px; width: 600px;" action="javascript:void(0);">
+			<div class="imgcontainer">
+				<span style="color: grey; font-size:12pt;">&nbsp;Trend</span>
+				<span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Form">&times;</span>
+			</div>
+			<br>
+			<div style="float: left; margin-left: 230px;">Range:&nbsp;</div>
+			<div style="float: left;"><input id="startDate" type="date"></div>
+			<div style="float: left;">&nbsp;to&nbsp;</div>
+			<div style="float: left;"><input id="endDate" type="date">&nbsp;</div>
+			<div style="float: left;"><button id="createChart" style="cursor: pointer;">GO</button></div>
+			<br>
+			<div id="lineChart" style="margin-left: 20px;"></div>
+			<br><br>
+		</form>
+	</div>
+
+	<div id="id08" class="modal"> 
+		<form name="newForm4" class="modal-content animate" style="font-family: Futura Md BT; height: 150px; width: 400px;" action="javascript:void(0);">
+			<div class="imgcontainer">
+				<span style="color: grey; font-size:12pt;">&nbsp;Inactive Session </span>
+			</div><br>
+			<span style="margin-left: 20px;">Session has been idle. Dashboard will logoff in <span id="timeLeft">-</span><br><br>
+			<span style="margin-left: 20px;">Click for more time</span><br><br>
+			<button style="margin-left: 160px; width: 80px; cursor: pointer;" onclick="document.getElementById('id08').style.display='none'" >More Time</button><br><br>
+		</form>
+	</div>
+
+	<div id="loading" style="position:fixed; top:0;left:0; width:100%; height:100%; background:rgba(0, 0, 0, 0.7);margin:auto;">
+		<div  class="loader" style="text-align:center;margin:auto; margin-top:450px;"></div>
+	</div>
+</body>
+
+
+<script src="scripts/getData.js"></script> 
+<script src="scripts/postData.js"></script> 
+<script src="scripts/mrv.js"></script> 
+</html>
